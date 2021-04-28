@@ -1,7 +1,11 @@
 import React from 'react'
-import useLocalStorage from './hooks/useLocalStorage';
 
+// Components
+import DashBoard from './DashBoard';
 import Login from "./Login";
+
+// hooks
+import useLocalStorage from './hooks/useLocalStorage';
 
 
 function App() {
@@ -9,7 +13,7 @@ function App() {
 
   return (
     <>
-      <Login onSubmit={setid} />
+      {id ? <DashBoard /> : <Login onSubmit={setid} />}
     </>
   );
 }
