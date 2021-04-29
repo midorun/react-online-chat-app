@@ -1,10 +1,10 @@
 import React from 'react'
 import SideBar from './SideBar'
 
-const DashBoard = () => {
+const DashBoard = ({ id }) => {
   return (
-    <div className="d-flex" styles={{ height: '100vh' }}>
-      <SideBar />
+    <div className="d-flex" style={{ height: "100vh" }}>
+      <SideBar id={id} />
     </div>
   )
 }

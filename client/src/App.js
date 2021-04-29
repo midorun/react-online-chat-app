@@ -13,7 +13,7 @@ function App() {
 
   return (
     <>
-      {id ? <DashBoard /> : <Login onSubmit={setid} />}
+      {id ? <DashBoard id={id} /> : <Login onSubmit={setid} />}
     </>
   );
 }
