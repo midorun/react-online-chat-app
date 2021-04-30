@@ -6,14 +6,22 @@ import Login from "./Login";
 
 // hooks
 import useLocalStorage from './hooks/useLocalStorage';
+import { ContactsProvider } from './contexts/ContactsProvider';
 
 
 function App() {
   const [id, setid] = useLocalStorage('user-id')
 
+  const dashBoardComponent = (
+    <ContactsProvider>
+      <DashBoard id={id} />
+    </ContactsProvider>
+  )
+
+
   return (
     <>
-      {id ? <DashBoard id={id} /> : <Login onSubmit={setid} />}
+      {id ? dashBoardComponent : <Login onSubmit={setid} />}
     </>
   );
 }
