@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 
-export const CONTACTS_LOCAL_STORAGE_KEY = 'online-chat-app-contacts'
+const CONTACTS_LOCAL_STORAGE_KEY = 'contacts'
 
 const ContactsContext = React.createContext()
 
