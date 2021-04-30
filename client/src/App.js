@@ -7,6 +7,7 @@ import Login from "./Login";
 // hooks
 import useLocalStorage from './hooks/useLocalStorage';
 import { ContactsProvider } from './contexts/ContactsProvider';
+import ConversationsProvider from './contexts/ConversationsProvider';
 
 
 function App() {
@@ -14,7 +15,9 @@ function App() {
 
   const dashBoardComponent = (
     <ContactsProvider>
-      <DashBoard id={id} />
+      <ConversationsProvider>
+        <DashBoard id={id} />
+      </ConversationsProvider>
     </ContactsProvider>
   )
 

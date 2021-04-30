@@ -4,7 +4,7 @@ import { useContacts } from './contexts/ContactsProvider'
 
 const Contacts = () => {
   const { contacts } = useContacts()
-  console.log(contacts);
+
   return (
     <ListGroup>
       {contacts.map(contact => (
