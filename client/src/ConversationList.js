@@ -26,7 +26,7 @@ const Conversations = () => {
               className="fas fa-times"
               onClick={() => deleteConversation(index)}
             />
-0          </ListGroup.Item>
+          </ListGroup.Item>
         )
       })}
 

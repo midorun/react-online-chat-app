@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Modal, Nav, Tab } from 'react-bootstrap'
-import Conversations from './Conversations'
-import Contacts from './Contacts'
+import Conversations from './ConversationList'
+import Contacts from './ContactList'
 import NewConversationModal from './NewConversationModal'
 import NewContactsModal from './NewContactsModal'
 
