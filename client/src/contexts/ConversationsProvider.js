@@ -34,8 +34,13 @@ const ConversationsProvider = ({ children }) => {
     setConversations(prev => [...prev, { recipients, messages: [] }])
   }
 
+  const deleteConversation = (index) => {
+    setConversations(prev => prev.filter((conversation, i, conversations) => conversations.indexOf(conversation) !== index))
+  }
+
   const value = {
     conversations: formattedConversations,
+    deleteConversation,
     createConversation,
     selectConversationIndex: setSelectedConversationIndex,
     selectedConversation: formattedConversations[selectedConversationIndex]

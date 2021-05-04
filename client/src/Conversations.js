@@ -3,7 +3,12 @@ import { ListGroup } from 'react-bootstrap'
 import { useConversations } from './contexts/ConversationsProvider'
 
 const Conversations = () => {
-  const { conversations, selectConversationIndex } = useConversations()
+  const {
+    conversations,
+    selectConversationIndex,
+    deleteConversation
+  } = useConversations()
+
   return (
     <ListGroup variant="flush">
       {conversations.map((conversation, index) => {
@@ -14,9 +19,14 @@ const Conversations = () => {
             action
             onClick={() => selectConversationIndex(index)}
             active={selected}
+            className="d-flex justify-content-between align-items-center"
           >
             {recipients.map(({ name }) => name).join(', ')}
-          </ListGroup.Item>
+            <i
+              className="fas fa-times"
+              onClick={() => deleteConversation(index)}
+            />
+0          </ListGroup.Item>
         )
       })}
 

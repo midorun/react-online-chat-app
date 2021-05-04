@@ -14,8 +14,18 @@ export const ContactsProvider = ({ children }) => {
     setContacts(prev => [...prev, { id, name }])
   }
 
+  const deleteContact = (index) => {
+    setContacts(prev => prev.filter((contact, i, contacts) => contacts.indexOf(contact) !== index))
+  }
+
+  const value = {
+    contacts,
+    createContact,
+    deleteContact
+  }
+
   return (
-    <ContactsContext.Provider value={{ contacts, createContact }}>
+    <ContactsContext.Provider value={value}>
       {children}
     </ContactsContext.Provider>
   )
