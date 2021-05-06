@@ -3,13 +3,21 @@ import { useConversations } from './contexts/ConversationsProvider'
 import Conversation from './Conversation'
 import SideBar from './SideBar'
 
-const DashBoard = ({ id }) => {
+type DashBoardProps = {
+  id: string
+}
+
+const DashBoard: React.FC<DashBoardProps> = ({ id }) => {
   const { selectedConversation } = useConversations()
 
   return (
     <div className="d-flex" style={{ height: "100vh" }}>
       <SideBar id={id} />
-      {selectedConversation ? <Conversation /> : null}
+      {selectedConversation ?
+        <Conversation
+          currentUserId={id}
+          currentConversation={selectedConversation}
+        /> : null}
     </div>
   )
 }

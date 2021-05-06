@@ -5,15 +5,19 @@ import Contacts from './ContactList'
 import NewConversationModal from './NewConversationModal'
 import NewContactsModal from './NewContactsModal'
 
+type SideBarProps = {
+  id: string
+}
+
 const CONVERSATIONS_KEY = 'Диалоги'
 const CONTACTS_KEY = 'Контакты'
 
-const SideBar = ({ id }) => {
-  const [activeKey, setActiveKey] = useState(CONVERSATIONS_KEY)
+const SideBar: React.FC<SideBarProps> = ({ id }) => {
+  const [activeKey, setActiveKey] = useState<string | null>(CONVERSATIONS_KEY)
   const [modalShow, setModalShow] = useState(false)
 
 
-  const closeModal = (params) => {
+  const closeModal = () => {
     setModalShow(false)
   }
 
@@ -21,7 +25,7 @@ const SideBar = ({ id }) => {
 
   return (
     <div className="d-flex flex-column" style={{ width: '250px' }} >
-      <Tab.Container activeKey={activeKey} onSelect={setActiveKey} >
+      <Tab.Container activeKey={activeKey} onSelect={(eventKey) => setActiveKey(eventKey)} >
         <Nav variant='tabs' className='justify-content-center' >
           <Nav.Item >
             <Nav.Link eventKey={CONVERSATIONS_KEY}>Диалоги</Nav.Link>

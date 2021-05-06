@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { useConversations } from './contexts/ConversationsProvider'
+import { ConversationType } from './contexts/ConversationsProvider';
 
 const Conversations = () => {
   const {
     conversations,
     selectConversationIndex,
-    deleteConversation
+    deleteConversation,
   } = useConversations()
 
   return (
     <ListGroup variant="flush">
       {conversations.map((conversation, index) => {
         const { recipients, selected } = conversation
+        console.log(conversations);
         return (
           <ListGroup.Item
             key={index}

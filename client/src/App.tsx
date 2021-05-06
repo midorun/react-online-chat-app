@@ -10,7 +10,7 @@ import { ContactsProvider } from './contexts/ContactsProvider';
 import ConversationsProvider from './contexts/ConversationsProvider';
 
 
-function App() {
+const App: React.FC = () => {
   const [id, setid] = useLocalStorage('user-id')
 
   const dashBoardComponent = (

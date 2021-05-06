@@ -1,20 +1,28 @@
 import React, { useState } from 'react'
 import { Form, Modal, Button } from 'react-bootstrap'
-import { useContacts } from './contexts/ContactsProvider'
+import { ContactType, useContacts } from './contexts/ContactsProvider'
 import { useConversations } from './contexts/ConversationsProvider'
 
-const NewConversationModal = ({ closeModal }) => {
-  const [selectedContactsIds, setSelectedContactsIds] = useState([])
+type Props = {
+  closeModal: () => void
+}
+
+const NewConversationModal: React.FC<Props> = ({ closeModal }) => {
+  const [selectedContactsIds, setSelectedContactsIds] = useState<Array<string>>([])
   const { contacts } = useContacts()
   const { createConversation } = useConversations()
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    createConversation(selectedContactsIds)
+
+    createConversation(selectedContactsIds.map(id => {
+      return contacts.find((contact: ContactType) => contact.id === id)
+    }))
+
     closeModal()
   }
 
-  const handleCheckboxChange = (contactId) => {
+  const handleCheckboxChange = (contactId: string) => {
     setSelectedContactsIds(prev => {
       if (prev.includes(contactId)) {
         return prev.filter(prevId => contactId !== prevId)
@@ -38,7 +46,7 @@ const NewConversationModal = ({ closeModal }) => {
               <Form.Check
                 type="checkbox"
                 label={contact.name}
-                value={selectedContactsIds.includes(contact.id)}
+                // value={selectedContactsIds.includes(contact.id)}
                 onChange={() => handleCheckboxChange(contact.id)}
               />
             </Form.Group>

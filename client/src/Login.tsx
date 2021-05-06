@@ -2,16 +2,20 @@ import React, { useRef } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
 
-export default function Login({ onSubmit }) {
-  const idInput = useRef()
+type LoginProps = {
+  onSubmit: (id: string | undefined) => void
+};
 
-  const handleFormSubmit = (e) => {
+const Login: React.FC<LoginProps> = ({ onSubmit }) => {
+  const idInput = useRef<HTMLInputElement>(null)
+
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(idInput.current.value)
+    onSubmit(idInput?.current?.value)
   }
 
   const generateNewId = () => {
-    idInput.current.value = uuidv4()
+    idInput!.current!.value = uuidv4()
   }
 
   return (
@@ -35,3 +39,5 @@ export default function Login({ onSubmit }) {
     </Container>
   )
 }
+
+export default Login

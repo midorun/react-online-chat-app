@@ -1,15 +1,23 @@
 import React, { useRef } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
-import { useContacts } from './contexts/ContactsProvider'
+import { ContactType, useContacts } from './contexts/ContactsProvider'
 
-const NewContactsModal = ({ closeModal }) => {
-  const idRef = useRef()
-  const nameRef = useRef()
+type Props = {
+  closeModal: () => void
+}
+
+const NewContactsModal: React.FC<Props> = ({ closeModal }) => {
+  const idRef = useRef<HTMLInputElement>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
   const { createContact } = useContacts()
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    createContact(idRef.current.value, nameRef.current.value)
+    createContact(
+      {
+        id: idRef?.current?.value,
+        name: nameRef?.current?.value
+      } as ContactType)
     closeModal()
   }
 
