@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { ContactType, useContacts } from './ContactsProvider'
+import { ContactType } from './ContactsProvider'
+import { useSocket } from './SocketProvider'
 
 type ConversationsContextType = {
   conversations: Array<ConversationType>,
   selectedConversation: ConversationType
   createConversation: (recipients: Array<ContactType | undefined>) => void,
   deleteConversation: (index: number) => void,
-  sendMessage: (message: MessageType, recipients: Array<number>) => void,
+  sendMessage: (message: MessageType, conversation: ConversationType) => void,
   selectConversationIndex: (index: number) => void,
-  // selectedConversation: number,
 }
 
 export type ConversationType = {
@@ -19,7 +19,7 @@ export type ConversationType = {
 }
 
 export type MessageType = {
-  sender: ContactType,
+  senderId: string
   text: string
 }
 
@@ -33,7 +33,7 @@ const ConversationsProvider: React.FC = ({ children }) => {
   const [conversations, setConversations] = useLocalStorage
     (CONVERSATIONS_LOCAL_STORAGE_KEY, [])
   const [selectedConversationIndex, setSelectedConversationIndex] = useState(0)
-  const { contacts } = useContacts()
+  const socket = useSocket()
 
   // ! В коцце линтер просил добавить () не знаю зачем, потом разобраться 
   const createConversation = (recipients: Array<ContactType | undefined>) => {
@@ -44,11 +44,19 @@ const ConversationsProvider: React.FC = ({ children }) => {
     setConversations((prev: Array<ConversationType>) => prev.filter((conversation, i, conversations) => conversations.indexOf(conversation) !== index))
   }
 
-  const sendMessage = (message: MessageType, recipients: Array<number>) => {
+  const addMessageToConversation = (message: MessageType, conversationToUpdate: ConversationType) => {
+    setConversations((prevConversations: Array<ConversationType>) => prevConversations.map(conversation => {
+      if (conversation.recipients === conversationToUpdate.recipients) {
+        conversationToUpdate.messages.push(message)
+      }
+      return conversation
+    }))
+  }
 
+  const sendMessage = (message: MessageType, conversationToUpdate: ConversationType) => {
+    socket.emit('send-message', { message, conversationToUpdate })
 
-    // setConversations((prev: Array<ConversationType>) => [...prev, conversation])
-    console.log('sendMessage');
+    addMessageToConversation(message, conversationToUpdate)
   }
 
   const formattedConversations: Array<ConversationType> = conversations.map((conversation: Array<ConversationType>, i: number) => {
@@ -72,3 +80,13 @@ const ConversationsProvider: React.FC = ({ children }) => {
 }
 
 export default ConversationsProvider
+
+function compareArrays(a: Array<any>, b: Array<any>) {
+  if (a.length !== b.length) {
+    return false
+  } else {
+    a.every((value, index) => value === b[index])
+  }
+
+
+}

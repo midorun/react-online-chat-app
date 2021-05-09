@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { useContacts } from './contexts/ContactsProvider'
 
-const Contacts: React.FC = () => {
+const ContactList: React.FC = () => {
   const { contacts } = useContacts()
 
   return (
@@ -14,4 +14,4 @@ const Contacts: React.FC = () => {
   )
 }
 
-export default Contacts
+export default ContactList

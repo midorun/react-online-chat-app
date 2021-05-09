@@ -8,17 +8,20 @@ import Login from "./Login";
 import useLocalStorage from './hooks/useLocalStorage';
 import { ContactsProvider } from './contexts/ContactsProvider';
 import ConversationsProvider from './contexts/ConversationsProvider';
+import { SocketProvider } from './contexts/SocketProvider';
 
 
 const App: React.FC = () => {
   const [id, setid] = useLocalStorage('user-id')
 
   const dashBoardComponent = (
-    <ContactsProvider>
-      <ConversationsProvider>
-        <DashBoard id={id} />
-      </ConversationsProvider>
-    </ContactsProvider>
+    <SocketProvider id={id}>
+      <ContactsProvider>
+        <ConversationsProvider>
+          <DashBoard id={id} />
+        </ConversationsProvider>
+      </ContactsProvider>
+    </SocketProvider>
   )
 
 

@@ -11,15 +11,14 @@ const Conversation: React.FC<Props> = ({ currentUserId, currentConversation }) =
   const [messageText, setMessageText] = useState('')
   const { sendMessage } = useConversations()
 
-  // const { messages } = currentConversation
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    const message = {
+      senderId: currentUserId,
+      text: messageText
+    }
+    sendMessage(message, currentConversation)
 
-    // sendMessage({
-    //   sender,
-    //   text
-    // }, ...recipients)
     setMessageText('')
   }
 
@@ -27,7 +26,9 @@ const Conversation: React.FC<Props> = ({ currentUserId, currentConversation }) =
   return (
     <div className="d-flex flex-column ml-2" style={{ width: '500px' }}>
       <div className="d-flex overflow-auto flex-grow-1">
-
+        {currentConversation.messages.map(message => (
+          <div>{message.text}</div>
+        ))}
       </div>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
