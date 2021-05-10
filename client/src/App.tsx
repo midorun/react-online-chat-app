@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const dashBoardComponent = (
     <SocketProvider id={id}>
       <ContactsProvider>
-        <ConversationsProvider>
+        <ConversationsProvider id={id}>
           <DashBoard id={id} />
         </ConversationsProvider>
       </ContactsProvider>

@@ -9,7 +9,7 @@ type ContactContextType = {
 
 export type ContactType = {
   id: string,
-  name: string
+  name?: string
 }
 
 const CONTACTS_LOCAL_STORAGE_KEY = 'contacts'
