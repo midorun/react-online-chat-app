@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState, createContext, FC, useEffect, useCallback } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { ContactType, useContacts } from './ContactsProvider'
 import { useSocket } from './SocketProvider'
@@ -19,7 +19,7 @@ export type MessageType = {
 
 const CONVERSATIONS_LOCAL_STORAGE_KEY = 'conversations'
 
-const ConversationsContext = React.createContext({} as ConversationsContextType)
+const ConversationsContext = createContext({} as ConversationsContextType)
 
 export const useConversations = () => useContext(ConversationsContext)
 
@@ -36,7 +36,7 @@ type ConversationsContextType = {
   selectConversationIndex: (index: number) => void,
 }
 
-const ConversationsProvider: React.FC<Props> = ({ id, children }) => {
+const ConversationsProvider: FC<Props> = ({ id, children }) => {
   const [conversations, setConversations] = useLocalStorage
     (CONVERSATIONS_LOCAL_STORAGE_KEY, [])
   const [selectedConversationIndex, setSelectedConversationIndex] = useState(0)
@@ -51,7 +51,8 @@ const ConversationsProvider: React.FC<Props> = ({ id, children }) => {
     setConversations((prev: Array<ConversationType>) => prev.filter((conversation, i, conversations) => conversations.indexOf(conversation) !== index))
   }
 
-  const addMessageToConversation = (message: MessageType, recipients: Array<ContactType>) => {
+  const addMessageToConversation = useCallback((message: MessageType, recipients: Array<ContactType>) => {
+
     setConversations((prevConversations: Array<ConversationType>) => {
       let isNewConversationNeeded = true
       const newMessage = message
@@ -74,20 +75,38 @@ const ConversationsProvider: React.FC<Props> = ({ id, children }) => {
         return newConversations
       }
     })
-  }
+  }, [setConversations])
+
+  useEffect(() => {
+    if (socket == null) return
+
+    socket.on('receive-message', ((data: any) => addMessageToConversation(data.message, data.recipients))
+    )
+
+    return () => socket.off('receive-message')
+  }, [socket, addMessageToConversation])
 
   const sendMessage = (message: MessageType, recipients: Array<ContactType>) => {
-    // socket.emit('send-message', { recipients, message })
+    socket.emit('send-message', { recipients, message })
+    console.log(recipients);
 
     addMessageToConversation(message, recipients)
   }
 
   const formattedConversations: Array<ConversationType> = conversations.map((conversation: ConversationType, i: number) => {
+    const recipients = conversation.recipients.map(recipient => {
+      const contact = contacts.find(contact => recipient.id === contact.id)
+      recipient.name = contact?.name || contact?.id
+      return recipient
+    })
+
     const messages = conversation.messages.map(message => {
       let { senderId, senderName } = message
       const contact = contacts.find((contact: ContactType) => contact.id === senderId)
+      console.log(contact);
+
       const fromCurrentUser = id === senderId
-      senderName = contact?.name || 'you'
+      senderName = contact?.name || senderId
 
       return {
         ...message,
@@ -97,11 +116,11 @@ const ConversationsProvider: React.FC<Props> = ({ id, children }) => {
     })
     return {
       ...conversation,
+      recipients,
       messages,
       selected: selectedConversationIndex === i
     }
   })
-  console.log(formattedConversations);
 
   const value = {
     conversations: formattedConversations,

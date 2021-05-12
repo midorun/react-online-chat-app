@@ -40,6 +40,7 @@ const Conversation: React.FC<Props> = ({ currentUserId, currentConversation }) =
       <div className="flex-grow-1 overflow-auto" style={{ width: '500px' }}>
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
           {currentConversation.messages.map((message, index) => {
+
             const lastMessage = currentConversation.messages.length - 1 === index
             return (
               <div

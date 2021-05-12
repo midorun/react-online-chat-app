@@ -16,6 +16,7 @@ export const SocketProvider = ({ id, children }) => {
       { query: { id } })
 
     setSocket(newSocket)
+
     return () => {
       newSocket.close()
     }
